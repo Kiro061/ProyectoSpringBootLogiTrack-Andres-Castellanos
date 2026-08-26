@@ -1,0 +1,4 @@
+package com.example.ProyectoSpringAndresCastellanos.Dto.Request;
+
+public class BodegaRequest {
+}
