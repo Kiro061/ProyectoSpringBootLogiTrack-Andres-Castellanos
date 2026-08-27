@@ -1,4 +1,7 @@
 package com.example.ProyectoSpringAndresCastellanos.Repository;
 
-public class BodegaRepository {
+import com.example.ProyectoSpringAndresCastellanos.Model.Bodega;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BodegaRepository extends JpaRepository<Bodega,Long> {
 }

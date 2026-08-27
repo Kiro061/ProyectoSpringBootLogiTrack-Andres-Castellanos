@@ -1,4 +1,7 @@
 package com.example.ProyectoSpringAndresCastellanos.Repository;
 
-public class MovimientoDetalleRepository {
+import com.example.ProyectoSpringAndresCastellanos.Model.MovimientoDetalle;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MovimientoDetalleRepository extends JpaRepository<MovimientoDetalle,Long> {
 }
