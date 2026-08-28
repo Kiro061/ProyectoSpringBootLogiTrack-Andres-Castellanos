@@ -22,7 +22,7 @@ public class Producto {
     @Column(length = 50)
     private String categoria;
     @Column(nullable = false)
-    private Long stock;
+    private int stock;
     @Column(nullable = false)
     private BigDecimal precio;
 }

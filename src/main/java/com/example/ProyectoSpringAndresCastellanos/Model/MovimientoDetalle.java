@@ -21,5 +21,5 @@ public class MovimientoDetalle {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
     @Column(nullable = false)
-    private Long cantidad;
+    private int cantidad;
 }

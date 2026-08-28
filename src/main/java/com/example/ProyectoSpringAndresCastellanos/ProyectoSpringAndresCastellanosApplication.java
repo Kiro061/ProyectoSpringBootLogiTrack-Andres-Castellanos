@@ -30,4 +30,5 @@ public class ProyectoSpringAndresCastellanosApplication {
 					+ auditoriaRepository.findAll().size());
 		};
 	}
+
 }

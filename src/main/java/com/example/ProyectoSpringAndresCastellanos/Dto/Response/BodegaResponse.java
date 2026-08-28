@@ -1,4 +1,10 @@
 package com.example.ProyectoSpringAndresCastellanos.Dto.Response;
 
-public class BodegaResponse {
+public record BodegaResponse (
+        Integer id,
+        String nombre,
+        String ubicacion,
+        Integer capacidad,
+        String encargado
+) {
 }

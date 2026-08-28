@@ -1,4 +1,12 @@
 package com.example.ProyectoSpringAndresCastellanos.Dto.Response;
 
-public class MovimientoResponse {
+import java.util.Date;
+
+public record MovimientoResponse (
+        Integer id,
+        Date fecha,
+        Integer usuario_id,
+        Integer bodega_origen_id,
+        Integer bodega_destino_id
+){
 }
