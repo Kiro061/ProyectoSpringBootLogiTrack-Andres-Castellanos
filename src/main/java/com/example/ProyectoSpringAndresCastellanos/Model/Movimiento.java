@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movimientos")
@@ -29,5 +31,7 @@ public class Movimiento {
     @ManyToOne
     @JoinColumn(name = "bodega_destino_id")
     private Bodega bodegaDestino;
+    @OneToMany(mappedBy = "movimiento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MovimientoDetalle> detalles = new ArrayList<>();
 
 }

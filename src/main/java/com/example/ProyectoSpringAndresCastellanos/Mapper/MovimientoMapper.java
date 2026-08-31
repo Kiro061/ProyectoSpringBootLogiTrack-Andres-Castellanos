@@ -13,11 +13,13 @@ public class MovimientoMapper {
         return new MovimientoResponse(
                 movimiento.getId(),
                 movimiento.getFecha(),
-                movimiento.getTipoMovimiento(),
+                movimiento.getTipoMovimiento().name(),
                 movimiento.getUsuario().getUsername(),
-                movimiento.getBodegaOrigen()!=null ?movimiento.getBodegaOrigen().getId():null,
-                movimiento.getBodegaDestino()!=null ?movimiento.getBodegaDestino().getId():null,
-                movimiento.getDettalles().stream().map(this::toDetalleResponse).toList()
+                movimiento.getBodegaOrigen() !=null ?movimiento.getBodegaOrigen().getId() : null,
+                movimiento.getBodegaDestino() !=null ?movimiento.getBodegaDestino().getId() : null,
+                movimiento.getDetalles().stream()
+                        .map(this::toDetalleResponse)
+                        .toList()
 
         );
     }
