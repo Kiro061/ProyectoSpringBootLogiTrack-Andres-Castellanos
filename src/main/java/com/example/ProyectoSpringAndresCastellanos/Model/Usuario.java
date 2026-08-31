@@ -32,7 +32,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private Boolean activo;
     @Column(nullable = false)
-    private LocalDateTime fecha_creacion;
+    private LocalDateTime fechaCreacion;
 
     // ---------- Métodos UserDetails ----------
     @Override

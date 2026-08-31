@@ -21,7 +21,7 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.crear(request));
     }
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<List<ProductoResponse>> obtenerTodos(){
         return ResponseEntity.ok(productoService.obtenerTodos());
     }

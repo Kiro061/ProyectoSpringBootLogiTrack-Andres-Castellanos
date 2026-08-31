@@ -18,7 +18,7 @@ public record ProductoRequest (
         @NotNull(message = "El stock no puede estar nulo")
         @Min(value =0,message = "El stock no puede ser negativo")
         Integer stock,
-        @NotBlank(message = "No se permite el precio vacio.")
+        @NotNull(message = "El precio no puede ser nulo.")
         @Min(value = 1, message = "El precio debe ser mayor a 0.")
         BigDecimal precio
 

@@ -19,6 +19,7 @@ import com.example.ProyectoSpringAndresCastellanos.Dto.Request.MovimientoDetalle
 import com.example.ProyectoSpringAndresCastellanos.Model.Movimiento;
 import com.example.ProyectoSpringAndresCastellanos.Model.MovimientoDetalle;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -69,6 +70,7 @@ public class MovimientoService {
 
         // 3) Crear la cabecera del movimiento
         Movimiento movimiento = new Movimiento();
+        movimiento.setFecha(LocalDateTime.now());
         movimiento.setTipoMovimiento(request.tipoMovimiento());
         movimiento.setUsuario(usuario);
         movimiento.setBodegaOrigen(bodegaOrigen);

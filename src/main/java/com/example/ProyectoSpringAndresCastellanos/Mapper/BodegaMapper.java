@@ -8,24 +8,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class BodegaMapper {
 
-    public Bodega toEntity(BodegaRequest request){
+    // Convierte un Request en una entidad Bodega.
+    public Bodega toEntity(BodegaRequest request) {
+
         Bodega bodega = new Bodega();
+
         bodega.setNombre(request.nombre());
         bodega.setUbicacion(request.ubicacion());
         bodega.setCapacidad(request.capacidad());
         bodega.setEncargado(request.encargado());
+
         return bodega;
     }
 
-    public BodegaResponse toResponse(Bodega bodega){
+    // Convierte una entidad Bodega en un Response.
+    public BodegaResponse toResponse(Bodega bodega) {
+
         return new BodegaResponse(
                 bodega.getId(),
                 bodega.getNombre(),
                 bodega.getUbicacion(),
                 bodega.getCapacidad(),
                 bodega.getEncargado()
-
         );
     }
 }
-

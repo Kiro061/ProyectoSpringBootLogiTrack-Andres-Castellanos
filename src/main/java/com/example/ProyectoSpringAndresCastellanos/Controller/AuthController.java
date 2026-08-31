@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 
 @RestController
-@RequestMapping
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final UsuarioRepository usuarioRepository;
@@ -41,6 +43,7 @@ public class AuthController {
         usuario.setNombre(request.getNombreCompleto());
         usuario.setRol(request.getRol());
         usuario.setActivo(true);
+        usuario.setFecha_creacion(LocalDateTime.now());
 
         usuarioRepository.save(usuario);
 

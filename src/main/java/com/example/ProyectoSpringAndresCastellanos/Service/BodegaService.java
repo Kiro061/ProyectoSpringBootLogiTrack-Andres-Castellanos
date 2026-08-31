@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 @Service
 @RequiredArgsConstructor
@@ -19,33 +18,68 @@ public class BodegaService {
     private final BodegaRepository bodegaRepository;
     private final BodegaMapper bodegaMapper;
 
-    public BodegaResponse crear(BodegaRequest request){
+    // Crear una bodega
+    public BodegaResponse crear(BodegaRequest request) {
+
         Bodega bodega = bodegaMapper.toEntity(request);
-        return bodegaMapper.toResponse(bodegaRepository.save(bodega));
+
+        Bodega guardada = bodegaRepository.save(bodega);
+
+        return bodegaMapper.toResponse(guardada);
     }
-     public List<BodegaResponse> obtenerTodas(){
+
+    // Obtener todas las bodegas
+    public List<BodegaResponse> obtenerTodas() {
+
         return bodegaRepository.findAll()
                 .stream()
                 .map(bodegaMapper::toResponse)
                 .toList();
-     }
+    }
 
-     public BodegaResponse actualizar(Long id, BodegaRequest request){
-        Bodega bodega = buscarPorId(id);
+    // Obtener una bodega por ID
+    public BodegaResponse obtenerPorId(Long id) {
+
+        Bodega bodega = bodegaRepository.findById(id)
+                .orElseThrow(() ->
+                        new BusinessRuleException(
+                                "Bodega no encontrada con id: " + id
+                        )
+                );
+
+        return bodegaMapper.toResponse(bodega);
+    }
+
+    // Actualizar una bodega
+    public BodegaResponse actualizar(Long id, BodegaRequest request) {
+
+        Bodega bodega = bodegaRepository.findById(id)
+                .orElseThrow(() ->
+                        new BusinessRuleException(
+                                "Bodega no encontrada con id: " + id
+                        )
+                );
+
         bodega.setNombre(request.nombre());
         bodega.setUbicacion(request.ubicacion());
         bodega.setCapacidad(request.capacidad());
         bodega.setEncargado(request.encargado());
-        return bodegaMapper.toResponse(bodegaRepository.save(bodega));
-     }
 
-     public void eliminar(Long id){
-        Bodega bodega = buscarPorId(id);
+        Bodega actualizada = bodegaRepository.save(bodega);
+
+        return bodegaMapper.toResponse(actualizada);
+    }
+
+    // Eliminar una bodega
+    public void eliminar(Long id) {
+
+        Bodega bodega = bodegaRepository.findById(id)
+                .orElseThrow(() ->
+                        new BusinessRuleException(
+                                "Bodega no encontrada con id: " + id
+                        )
+                );
+
         bodegaRepository.delete(bodega);
-     }
-
-     private Bodega buscarPorId(Long id){
-        return bodegaRepository.findById(id)
-                .orElseThrow(()-> new BusinessRuleException("Bodega no encontrada con id: "+ id));
-     }
+    }
 }
