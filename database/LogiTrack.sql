@@ -1,190 +1,209 @@
--- =========================================================
--- LogiTrack S.A. - Script de creación de base de datos
--- Proyecto educativo: Spring Boot + JWT + Auditoría
--- Motor: MySQL 8+
--- =========================================================
+CREATE DATABASE  IF NOT EXISTS `logitrack_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `logitrack_db`;
+-- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: logitrack_db
+-- ------------------------------------------------------
+-- Server version	8.0.46
 
-CREATE DATABASE IF NOT EXISTS logitrack_db
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-USE logitrack_db;
+--
+-- Table structure for table `auditoria`
+--
 
--- ---------------------------------------------------------
--- Limpieza (útil en desarrollo, para poder re-ejecutar)
--- ---------------------------------------------------------
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS auditoria;
-DROP TABLE IF EXISTS movimiento_detalle;
-DROP TABLE IF EXISTS movimientos;
-DROP TABLE IF EXISTS productos;
-DROP TABLE IF EXISTS bodegas;
-DROP TABLE IF EXISTS usuarios;
-SET FOREIGN_KEY_CHECKS = 1;
+DROP TABLE IF EXISTS `auditoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auditoria` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `tipo_operacion` varchar(20) NOT NULL,
+  `fecha_hora` datetime NOT NULL,
+  `usuario_id` bigint DEFAULT NULL,
+  `entidad_afectada` varchar(100) NOT NULL,
+  `entidad_id` bigint DEFAULT NULL,
+  `valor_anterior` text,
+  `valor_nuevo` text,
+  PRIMARY KEY (`id`),
+  KEY `fk_auditoria_usuario` (`usuario_id`),
+  CONSTRAINT `fk_auditoria_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ---------------------------------------------------------
--- 1. USUARIOS (login + roles para Spring Security / JWT)
--- ---------------------------------------------------------
-CREATE TABLE usuarios (
-    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username        VARCHAR(50)  NOT NULL UNIQUE,
-    password        VARCHAR(255) NOT NULL,      -- se guarda hasheada (BCrypt)
-    nombre_completo VARCHAR(100),
-    rol             ENUM('ADMIN', 'EMPLEADO') NOT NULL DEFAULT 'EMPLEADO',
-    activo          BOOLEAN NOT NULL DEFAULT TRUE,
-    fecha_creacion  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+--
+-- Dumping data for table `auditoria`
+--
 
--- ---------------------------------------------------------
--- 2. BODEGAS
--- ---------------------------------------------------------
-CREATE TABLE bodegas (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre     VARCHAR(100) NOT NULL,
-    ubicacion  VARCHAR(150) NOT NULL,
-    capacidad  INT NOT NULL,
-    encargado  VARCHAR(100)
-);
+LOCK TABLES `auditoria` WRITE;
+/*!40000 ALTER TABLE `auditoria` DISABLE KEYS */;
+INSERT INTO `auditoria` VALUES (1,'INSERT','2026-08-31 20:26:19',3,'Bodega',7,NULL,'id=7, nombre=Bodega Norte, ubicacion=Bucaramanga, capacidad=200, encargado=Arturo Ojeda'),(2,'INSERT','2026-08-31 20:26:27',3,'Bodega',8,NULL,'id=8, nombre=Bodega Sur, ubicacion=Girón, capacidad=150, encargado=Andrés Castellanos'),(3,'INSERT','2026-08-31 20:27:25',3,'Producto',11,NULL,'id=11, nombre=Mouse inalámbrico, categoria=Periféricos, stock=0, precio=45000'),(4,'INSERT','2026-08-31 20:27:41',3,'Producto',12,NULL,'id=12, nombre=Teclado mecánico, categoria=Periféricos, stock=5, precio=120000'),(5,'INSERT','2026-08-31 20:28:36',3,'Movimiento',5,NULL,'id=5, fecha=2026-08-31T20:28:36.166341900, tipoMovimiento=ENTRADA, usuario=3, bodegaOrigen=null, bodegaDestino=7'),(6,'INSERT','2026-08-31 20:29:05',3,'Movimiento',6,NULL,'id=6, fecha=2026-08-31T20:29:04.851071500, tipoMovimiento=TRANSFERENCIA, usuario=3, bodegaOrigen=7, bodegaDestino=8'),(7,'INSERT','2026-08-31 20:29:23',3,'Movimiento',7,NULL,'id=7, fecha=2026-08-31T20:29:22.586879500, tipoMovimiento=SALIDA, usuario=3, bodegaOrigen=8, bodegaDestino=null'),(8,'INSERT','2026-08-31 20:44:46',3,'Bodega',9,NULL,'id=9, nombre=Bodega Bucaramanga, ubicacion=Bucaramanga, capacidad=1000, encargado=Carlos Ramirez'),(9,'INSERT','2026-08-31 20:45:14',3,'Bodega',10,NULL,'id=10, nombre=Bodega Floridablanca, ubicacion=Floridablanca, capacidad=800, encargado=Juan Perez'),(10,'INSERT','2026-08-31 20:45:29',3,'Bodega',11,NULL,'id=11, nombre=Bodega Giron, ubicacion=Giron, capacidad=600, encargado=Pedro Gomez'),(11,'UPDATE','2026-08-31 20:47:39',3,'Bodega',1,'id=1, nombre=Bodega Central, ubicacion=Bogotá, capacidad=5000, encargado=Carlos Gómez','id=1, nombre=Bodega Principal Bucaramanga, ubicacion=Bucaramanga, capacidad=1500, encargado=Carlos Ramirez'),(12,'UPDATE','2026-08-31 20:47:41',3,'Bodega',1,'id=1, nombre=Bodega Principal Bucaramanga, ubicacion=Bucaramanga, capacidad=1500, encargado=Carlos Ramirez','id=1, nombre=Bodega Principal Bucaramanga, ubicacion=Bucaramanga, capacidad=1500, encargado=Carlos Ramirez'),(13,'INSERT','2026-09-01 15:18:46',3,'Producto',13,NULL,'id=13, nombre=Laptop Lenovo V14, categoria=Tecnologia, stock=32, precio=1500000'),(14,'INSERT','2026-09-01 15:19:15',3,'Movimiento',8,NULL,'id=8, fecha=2026-09-01T15:19:15.122853900, tipoMovimiento=ENTRADA, usuario=3, bodegaOrigen=null, bodegaDestino=1');
+/*!40000 ALTER TABLE `auditoria` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ---------------------------------------------------------
--- 3. PRODUCTOS
--- ---------------------------------------------------------
-CREATE TABLE productos (
-    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre    VARCHAR(100) NOT NULL,
-    categoria VARCHAR(50),
-    stock     INT NOT NULL DEFAULT 0,
-    precio    DECIMAL(10,2) NOT NULL DEFAULT 0.00
-);
+--
+-- Table structure for table `bodegas`
+--
 
--- ---------------------------------------------------------
--- 4. MOVIMIENTOS (cabecera: entrada / salida / transferencia)
---    bodega_origen se usa en SALIDA y TRANSFERENCIA
---    bodega_destino se usa en ENTRADA y TRANSFERENCIA
--- ---------------------------------------------------------
-CREATE TABLE movimientos (
-    id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fecha            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    tipo_movimiento  ENUM('ENTRADA', 'SALIDA', 'TRANSFERENCIA') NOT NULL,
-    usuario_id       BIGINT NOT NULL,
-    bodega_origen_id  BIGINT NULL,
-    bodega_destino_id BIGINT NULL,
+DROP TABLE IF EXISTS `bodegas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bodegas` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `ubicacion` varchar(150) NOT NULL,
+  `capacidad` int NOT NULL,
+  `encargado` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-    CONSTRAINT fk_mov_usuario  FOREIGN KEY (usuario_id)       REFERENCES usuarios(id),
-    CONSTRAINT fk_mov_origen   FOREIGN KEY (bodega_origen_id)  REFERENCES bodegas(id),
-    CONSTRAINT fk_mov_destino  FOREIGN KEY (bodega_destino_id) REFERENCES bodegas(id)
-);
+--
+-- Dumping data for table `bodegas`
+--
 
--- ---------------------------------------------------------
--- 5. MOVIMIENTO_DETALLE (productos y cantidades por movimiento)
---    Un movimiento puede incluir varios productos -> relación 1:N
--- ---------------------------------------------------------
-CREATE TABLE movimiento_detalle (
-    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
-    movimiento_id BIGINT NOT NULL,
-    producto_id   BIGINT NOT NULL,
-    cantidad      INT NOT NULL,
+LOCK TABLES `bodegas` WRITE;
+/*!40000 ALTER TABLE `bodegas` DISABLE KEYS */;
+INSERT INTO `bodegas` VALUES (1,'Bodega Principal Bucaramanga','Bucaramanga',1500,'Carlos Ramirez'),(2,'Bodega Norte','Bucaramanga',3000,'Ana Rodríguez'),(3,'Bodega Occidente','Medellín',4000,'Luis Torres'),(4,'Bodega Central','Bogotá',5000,'Carlos Gómez'),(5,'Bodega Norte','Bucaramanga',3000,'Ana Rodríguez'),(6,'Bodega Occidente','Medellín',4000,'Luis Torres'),(7,'Bodega Norte','Bucaramanga',200,'Arturo Ojeda'),(8,'Bodega Sur','Girón',150,'Andrés Castellanos'),(9,'Bodega Bucaramanga','Bucaramanga',1000,'Carlos Ramirez'),(10,'Bodega Floridablanca','Floridablanca',800,'Juan Perez'),(11,'Bodega Giron','Giron',600,'Pedro Gomez');
+/*!40000 ALTER TABLE `bodegas` ENABLE KEYS */;
+UNLOCK TABLES;
 
-    CONSTRAINT fk_det_movimiento FOREIGN KEY (movimiento_id) REFERENCES movimientos(id) ON DELETE CASCADE,
-    CONSTRAINT fk_det_producto   FOREIGN KEY (producto_id)   REFERENCES productos(id)
-);
+--
+-- Table structure for table `movimiento_detalle`
+--
 
--- ---------------------------------------------------------
--- 6. AUDITORIA (registro automático de cambios INSERT/UPDATE/DELETE)
---    valor_anterior / valor_nuevo se guardan como JSON en texto,
---    para mantenerlo simple (no se crea una tabla por entidad).
--- ---------------------------------------------------------
-CREATE TABLE auditoria (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tipo_operacion    ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-    fecha_hora        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    usuario_id        BIGINT NULL,
-    entidad_afectada  VARCHAR(100) NOT NULL,   -- ej: "Producto", "Bodega"
-    entidad_id        BIGINT,                  -- id del registro afectado
-    valor_anterior    JSON NULL,
-    valor_nuevo       JSON NULL,
+DROP TABLE IF EXISTS `movimiento_detalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movimiento_detalle` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `movimiento_id` bigint NOT NULL,
+  `producto_id` bigint NOT NULL,
+  `cantidad` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_det_movimiento` (`movimiento_id`),
+  KEY `fk_det_producto` (`producto_id`),
+  CONSTRAINT `fk_det_movimiento` FOREIGN KEY (`movimiento_id`) REFERENCES `movimientos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_det_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-    CONSTRAINT fk_aud_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-);
+--
+-- Dumping data for table `movimiento_detalle`
+--
 
--- ---------------------------------------------------------
--- Índices útiles para las consultas avanzadas del punto 6
--- ---------------------------------------------------------
-CREATE INDEX idx_productos_stock       ON productos(stock);
-CREATE INDEX idx_movimientos_fecha     ON movimientos(fecha);
-CREATE INDEX idx_movimientos_tipo      ON movimientos(tipo_movimiento);
-CREATE INDEX idx_auditoria_usuario     ON auditoria(usuario_id);
-CREATE INDEX idx_auditoria_tipo        ON auditoria(tipo_operacion);
+LOCK TABLES `movimiento_detalle` WRITE;
+/*!40000 ALTER TABLE `movimiento_detalle` DISABLE KEYS */;
+INSERT INTO `movimiento_detalle` VALUES (5,5,11,50),(6,5,12,20),(7,6,11,15),(8,7,11,5),(9,8,13,35);
+/*!40000 ALTER TABLE `movimiento_detalle` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- =========================================================
--- DATOS DE PRUEBA (data.sql)
--- =========================================================
+--
+-- Table structure for table `movimientos`
+--
 
--- Contraseñas de ejemplo ya hasheadas con BCrypt para "123456"
--- (genera las tuyas reales desde Spring al registrar usuarios)
-INSERT INTO usuarios (username, password, nombre_completo, rol) VALUES
-('admin',   '$2a$10$7EqJtq98hPqEX7fNZaFWoOa1J4V4X5g2b5g5D0aA9wFhF6M3s0m0K', 'Administrador General', 'ADMIN'),
-('jperez',  '$2a$10$7EqJtq98hPqEX7fNZaFWoOa1J4V4X5g2b5g5D0aA9wFhF6M3s0m0K', 'Juan Pérez',            'EMPLEADO');
+DROP TABLE IF EXISTS `movimientos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movimientos` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tipo_movimiento` enum('ENTRADA','SALIDA','TRANSFERENCIA') NOT NULL,
+  `usuario_id` bigint NOT NULL,
+  `bodega_origen_id` bigint DEFAULT NULL,
+  `bodega_destino_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_mov_usuario` (`usuario_id`),
+  KEY `fk_mov_origen` (`bodega_origen_id`),
+  KEY `fk_mov_destino` (`bodega_destino_id`),
+  CONSTRAINT `fk_mov_destino` FOREIGN KEY (`bodega_destino_id`) REFERENCES `bodegas` (`id`),
+  CONSTRAINT `fk_mov_origen` FOREIGN KEY (`bodega_origen_id`) REFERENCES `bodegas` (`id`),
+  CONSTRAINT `fk_mov_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO bodegas (nombre, ubicacion, capacidad, encargado) VALUES
-('Bodega Central',    'Bogotá',        5000, 'Carlos Gómez'),
-('Bodega Norte',      'Bucaramanga',   3000, 'Ana Rodríguez'),
-('Bodega Occidente',  'Medellín',      4000, 'Luis Torres');
+--
+-- Dumping data for table `movimientos`
+--
 
-INSERT INTO productos (nombre, categoria, stock, precio) VALUES
-('Laptop Lenovo V15',      'Tecnología', 25, 1800000.00),
-('Mouse Inalámbrico',      'Tecnología', 5,  35000.00),
-('Silla Ergonómica',       'Muebles',    12, 250000.00),
-('Escritorio Ejecutivo',   'Muebles',    3,  600000.00),
-('Cable HDMI 2m',          'Tecnología', 8,  15000.00);
+LOCK TABLES `movimientos` WRITE;
+/*!40000 ALTER TABLE `movimientos` DISABLE KEYS */;
+INSERT INTO `movimientos` VALUES (3,'2026-08-28 08:53:16','ENTRADA',1,NULL,1),(4,'2026-08-28 08:53:53','SALIDA',2,1,NULL),(5,'2026-08-31 20:28:36','ENTRADA',3,NULL,7),(6,'2026-08-31 20:29:05','TRANSFERENCIA',3,7,8),(7,'2026-08-31 20:29:23','SALIDA',3,8,NULL),(8,'2026-09-01 15:19:15','ENTRADA',3,NULL,1);
+/*!40000 ALTER TABLE `movimientos` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Movimiento de ENTRADA (llega mercancía a la bodega destino)
-INSERT INTO movimientos (tipo_movimiento, usuario_id, bodega_destino_id) VALUES
-('ENTRADA', 1, 1);
-INSERT INTO movimiento_detalle (movimiento_id, producto_id, cantidad) VALUES
-(1, 1, 10),
-(1, 2, 20);
+--
+-- Table structure for table `productos`
+--
 
--- Movimiento de SALIDA (sale mercancía desde la bodega origen)
-INSERT INTO movimientos (tipo_movimiento, usuario_id, bodega_origen_id) VALUES
-('SALIDA', 2, 1);
-INSERT INTO movimiento_detalle (movimiento_id, producto_id, cantidad) VALUES
-(2, 2, 15);
+DROP TABLE IF EXISTS `productos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productos` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `categoria` varchar(50) DEFAULT NULL,
+  `stock` int NOT NULL DEFAULT '0',
+  `precio` decimal(10,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Movimiento de TRANSFERENCIA (entre dos bodegas)
-INSERT INTO movimientos (tipo_movimiento, usuario_id, bodega_origen_id, bodega_destino_id) VALUES
-('TRANSFERENCIA', 1, 1, 2);
-INSERT INTO movimiento_detalle (movimiento_id, producto_id, cantidad) VALUES
-(3, 3, 4);
+--
+-- Dumping data for table `productos`
+--
 
--- Ejemplo de registro de auditoría
-INSERT INTO auditoria (tipo_operacion, usuario_id, entidad_afectada, entidad_id, valor_anterior, valor_nuevo) VALUES
-('UPDATE', 1, 'Producto', 2, '{"stock": 20}', '{"stock": 5}');
+LOCK TABLES `productos` WRITE;
+/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` VALUES (1,'Laptop Lenovo V15','Tecnología',25,1800000.00),(2,'Mouse Inalámbrico','Tecnología',5,35000.00),(3,'Silla Ergonómica','Muebles',12,250000.00),(4,'Escritorio Ejecutivo','Muebles',3,600000.00),(5,'Cable HDMI 2m','Tecnología',8,15000.00),(6,'Laptop Lenovo V15','Tecnología',25,1800000.00),(7,'Mouse Inalámbrico','Tecnología',5,35000.00),(8,'Silla Ergonómica','Muebles',12,250000.00),(9,'Escritorio Ejecutivo','Muebles',3,600000.00),(10,'Cable HDMI 2m','Tecnología',8,15000.00),(11,'Mouse inalámbrico','Periféricos',45,45000.00),(12,'Teclado mecánico','Periféricos',25,120000.00),(13,'Laptop Lenovo V14','Tecnologia',67,1500000.00);
+/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- =========================================================
--- CONSULTAS DE EJEMPLO (para probar los reportes del punto 6)
--- =========================================================
+--
+-- Table structure for table `usuarios`
+--
 
--- Productos con stock bajo (< 10 unidades)
--- SELECT * FROM productos WHERE stock < 10;
+DROP TABLE IF EXISTS `usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `usuarios` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  `rol` enum('ADMIN','EMPLEADO') NOT NULL DEFAULT 'EMPLEADO',
+  `activo` tinyint(1) NOT NULL DEFAULT '1',
+  `fecha_creacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Movimientos por rango de fechas
--- SELECT * FROM movimientos WHERE fecha BETWEEN '2026-01-01' AND '2026-12-31';
+--
+-- Dumping data for table `usuarios`
+--
 
--- Auditorías por usuario
--- SELECT * FROM auditoria WHERE usuario_id = 1;
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'admin','123456789','Administrador General','ADMIN',1,'2026-08-28 08:44:01'),(2,'jperez','123456789','Juan Pérez','EMPLEADO',1,'2026-08-28 08:44:01'),(3,'admin1','$2a$10$7u1TzEjh40uJ97D0EjslceEXw5UrPJU8Ljlh.UUI4N/c1nnz.6oEa','Admin','ADMIN',1,'2026-08-31 16:33:39'),(4,'Aojeda','$2a$10$7GXyGuGthVlBeVKjMMUviujxCejOS/fRpJQcJMrW69qoaJh6OZaxS','Arturo Ojeda','EMPLEADO',1,'2026-08-31 19:53:46');
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
--- Auditorías por tipo de operación
--- SELECT * FROM auditoria WHERE tipo_operacion = 'UPDATE';
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Stock total por bodega (a partir de movimientos ENTRADA/SALIDA/TRANSFERENCIA)
--- (referencial: en el backend normalmente se mantiene un stock por bodega
---  con una tabla intermedia bodega_producto; aquí se deja el stock global
---  en productos para simplificar el proyecto educativo)
-
--- Productos más movidos (top productos por cantidad total movida)
--- SELECT p.nombre, SUM(md.cantidad) AS total_movido
--- FROM movimiento_detalle md
--- JOIN productos p ON p.id = md.producto_id
--- GROUP BY p.nombre
--- ORDER BY total_movido DESC;
+-- Dump completed on 2026-09-01 17:03:50
