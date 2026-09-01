@@ -1,14 +1,12 @@
 package com.example.ProyectoSpringAndresCastellanos.Controller;
 
-
 import com.example.ProyectoSpringAndresCastellanos.Dto.Request.BodegaRequest;
 import com.example.ProyectoSpringAndresCastellanos.Dto.Response.BodegaResponse;
-import com.example.ProyectoSpringAndresCastellanos.Mapper.BodegaMapper;
-import com.example.ProyectoSpringAndresCastellanos.Model.Bodega;
-import com.example.ProyectoSpringAndresCastellanos.Repository.BodegaRepository;
+import com.example.ProyectoSpringAndresCastellanos.Service.BodegaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,62 +15,59 @@ import java.util.List;
 @RequestMapping("/bodegas")
 @RequiredArgsConstructor
 public class BodegaController {
-    private final BodegaRepository bodegaRepository;
-    private final BodegaMapper bodegaMapper;
+
+    private final BodegaService bodegaService;
 
     // Crear una bodega
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BodegaResponse> crear(
-            @Valid@RequestBody BodegaRequest request){
-        Bodega bodega = bodegaMapper.toEntity(request);
-        Bodega guardar = bodegaRepository.save(bodega);
-        return ResponseEntity.ok(bodegaMapper.toResponse(guardar));
+            @Valid @RequestBody BodegaRequest request) {
+
+        return ResponseEntity.ok(
+                bodegaService.crear(request)
+        );
     }
 
-    // Listar todas las bodegas
+    // Obtener todas las bodegas
     @GetMapping
-    public ResponseEntity<List<BodegaResponse>> listar() {
-        List<BodegaResponse> bodegas = bodegaRepository.findAll()
-                .stream()
-                .map(bodegaMapper::toResponse)
-                .toList();
-        return ResponseEntity.ok(bodegas);
+    public ResponseEntity<List<BodegaResponse>> obtenerTodas() {
+
+        return ResponseEntity.ok(
+                bodegaService.obtenerTodas()
+        );
     }
 
-    // Buscar una bodega por ID
+    // Obtener una bodega por ID
     @GetMapping("/{id}")
-    public ResponseEntity<BodegaResponse> buscarPorId(
-            @PathVariable Long id){
-        Bodega bodega = bodegaRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Bodega no encontrada."));
-        return ResponseEntity.ok(bodegaMapper.toResponse(bodega));
+    public ResponseEntity<BodegaResponse> obtenerPorId(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                bodegaService.obtenerPorId(id)
+        );
     }
 
     // Actualizar una bodega
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BodegaResponse> actualizar(
             @PathVariable Long id,
-            @Valid @RequestBody BodegaRequest request){
-        Bodega bodega = bodegaRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Bodega no encontrada."));
-        bodega.setNombre(request.nombre());
-        bodega.setUbicacion(request.ubicacion());
-        bodega.setCapacidad(request.capacidad());
-        bodega.setEncargado(request.encargado());
-        Bodega actualizada = bodegaRepository.save(bodega);
-        return ResponseEntity.ok(bodegaMapper.toResponse(actualizada));
+            @Valid @RequestBody BodegaRequest request) {
 
+        return ResponseEntity.ok(
+                bodegaService.actualizar(id, request)
+        );
     }
 
     // Eliminar una bodega
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(
             @PathVariable Long id) {
 
-        Bodega bodega = bodegaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bodega no encontrada"));
-        bodegaRepository.delete(bodega);
+        bodegaService.eliminar(id);
+
         return ResponseEntity.noContent().build();
     }
 }
-

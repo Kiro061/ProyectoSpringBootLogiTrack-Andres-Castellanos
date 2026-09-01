@@ -25,14 +25,14 @@ public class Usuario implements UserDetails {
     private  String username;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false, length = 100)
+    @Column(name = "nombre",nullable = false, length = 100)
     private String nombre;
     @Enumerated(EnumType.STRING)
     private Rol rol;
     @Column(nullable = false)
     private Boolean activo;
-    @Column(nullable = false)
-    private LocalDateTime fecha_creacion;
+    @Column(name = "fecha_creacion",nullable = false)
+    private LocalDateTime fechaCreacion;
 
     // ---------- Métodos UserDetails ----------
     @Override

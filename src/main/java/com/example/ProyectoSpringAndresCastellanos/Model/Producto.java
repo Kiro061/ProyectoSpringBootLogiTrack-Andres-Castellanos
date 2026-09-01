@@ -1,6 +1,5 @@
 package com.example.ProyectoSpringAndresCastellanos.Model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,18 +10,38 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "productos")
-@Getter@Setter
-@AllArgsConstructor@NoArgsConstructor
-public class Producto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Producto implements Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 100)
-    private String nombre;
-    @Column(length = 50)
-    private String categoria;
+
     @Column(nullable = false)
-    private int stock;
+    private String nombre;
+
+    @Column(nullable = false)
+    private String categoria;
+
+    @Column(nullable = false)
+    private Integer stock;
+
     @Column(nullable = false)
     private BigDecimal precio;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public String getAuditData() {
+        return "id=" + id +
+                ", nombre=" + nombre +
+                ", categoria=" + categoria +
+                ", stock=" + stock +
+                ", precio=" + precio;
+    }
 }

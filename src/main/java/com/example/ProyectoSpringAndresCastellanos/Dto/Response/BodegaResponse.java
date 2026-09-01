@@ -1,7 +1,7 @@
 package com.example.ProyectoSpringAndresCastellanos.Dto.Response;
 
 public record BodegaResponse (
-        Integer id,
+        Long id,
         String nombre,
         String ubicacion,
         Integer capacidad,

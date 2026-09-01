@@ -2,6 +2,7 @@ package com.example.ProyectoSpringAndresCastellanos.Dto.Request;
 
 import com.example.ProyectoSpringAndresCastellanos.Model.Rol;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class RegisterRequest {
 
     private String nombreCompleto;
 
-    @NotBlank(message = "El rol es obligatorio")
+    @NotNull(message = "El rol es obligatorio")
     private Rol rol;
 
 }

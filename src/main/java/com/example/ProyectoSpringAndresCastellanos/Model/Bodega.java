@@ -8,18 +8,38 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "bodegas")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-public class Bodega {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Bodega implements Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false, length = 100)
+    private Long id;
+
+    @Column(nullable = false)
     private String nombre;
-    @Column(nullable = false, length = 150)
+
+    @Column(nullable = false)
     private String ubicacion;
+
     @Column(nullable = false)
     private Integer capacidad;
-    @Column(length = 100)
+
+    @Column(nullable = false)
     private String encargado;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public String getAuditData() {
+        return "id=" + id +
+                ", nombre=" + nombre +
+                ", ubicacion=" + ubicacion +
+                ", capacidad=" + capacidad +
+                ", encargado=" + encargado;
+    }
 }
