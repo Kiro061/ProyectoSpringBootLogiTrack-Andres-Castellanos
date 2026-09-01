@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "auditoria")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Auditoria {
@@ -41,4 +42,5 @@ public class Auditoria {
 
     @Column(name = "valor_nuevo", columnDefinition = "TEXT")
     private String valoresNuevos;
+
 }

@@ -1,6 +1,5 @@
 package com.example.ProyectoSpringAndresCastellanos.Model;
 
-import com.example.ProyectoSpringAndresCastellanos.Model.Listener.AuditoriaListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,26 +8,25 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "bodegas")
-@EntityListeners(AuditoriaListener.class)
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bodega implements Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false)
     private String ubicacion;
 
     @Column(nullable = false)
     private Integer capacidad;
 
-    @Column(length = 100)
+    @Column(nullable = false)
     private String encargado;
 
     @Override
@@ -38,7 +36,8 @@ public class Bodega implements Auditable {
 
     @Override
     public String getAuditData() {
-        return "nombre=" + nombre +
+        return "id=" + id +
+                ", nombre=" + nombre +
                 ", ubicacion=" + ubicacion +
                 ", capacidad=" + capacidad +
                 ", encargado=" + encargado;

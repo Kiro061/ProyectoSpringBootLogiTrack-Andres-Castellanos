@@ -43,8 +43,7 @@ public class AuthController {
         usuario.setNombre(request.getNombreCompleto());
         usuario.setRol(request.getRol());
         usuario.setActivo(true);
-        usuario.setFecha_creacion(LocalDateTime.now());
-
+        usuario.setFechaCreacion(LocalDateTime.now());
         usuarioRepository.save(usuario);
 
         String token = jwtService.generarToken(usuario);

@@ -4,10 +4,7 @@ import com.example.ProyectoSpringAndresCastellanos.Dto.Request.MovimientoRequest
 import com.example.ProyectoSpringAndresCastellanos.Dto.Response.MovimientoResponse;
 import com.example.ProyectoSpringAndresCastellanos.Exception.BusinessRuleException;
 import com.example.ProyectoSpringAndresCastellanos.Mapper.MovimientoMapper;
-import com.example.ProyectoSpringAndresCastellanos.Model.Bodega;
-import com.example.ProyectoSpringAndresCastellanos.Model.Producto;
-import com.example.ProyectoSpringAndresCastellanos.Model.TipoMovimiento;
-import com.example.ProyectoSpringAndresCastellanos.Model.Usuario;
+import com.example.ProyectoSpringAndresCastellanos.Model.*;
 import com.example.ProyectoSpringAndresCastellanos.Repository.BodegaRepository;
 import com.example.ProyectoSpringAndresCastellanos.Repository.MovimientoRepository;
 import com.example.ProyectoSpringAndresCastellanos.Repository.ProductoRepository;
@@ -16,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.example.ProyectoSpringAndresCastellanos.Dto.Request.MovimientoDetalleRequest;
-import com.example.ProyectoSpringAndresCastellanos.Model.Movimiento;
-import com.example.ProyectoSpringAndresCastellanos.Model.MovimientoDetalle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +25,8 @@ public class MovimientoService {
     private final BodegaRepository bodegaRepository;
     private final ProductoRepository productoRepository;
     private final MovimientoMapper movimientoMapper;
+    private final AuditoriaService auditoriaService;
+
 
     @Transactional
     public MovimientoResponse registrar(MovimientoRequest request) {
@@ -97,6 +94,13 @@ public class MovimientoService {
 
         // 5) Guardar (cascade guarda también los detalles)
         Movimiento guardado = movimientoRepository.save(movimiento);
+
+        auditoriaService.registrar(
+                guardado,
+                TipoOperacion.INSERT,
+                null,
+                guardado.getAuditData()
+        );
 
         return movimientoMapper.toResponse(guardado);
     }

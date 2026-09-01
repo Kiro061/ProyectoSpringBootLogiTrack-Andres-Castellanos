@@ -1,35 +1,35 @@
 package com.example.ProyectoSpringAndresCastellanos.Model;
 
-import com.example.ProyectoSpringAndresCastellanos.Model.Listener.AuditoriaListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "productos")
-@EntityListeners(AuditoriaListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Producto implements Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Mantén aquí tus demás campos exactamente como los tienes.
-
-    // Ejemplo:
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private String categoria;
 
+    @Column(nullable = false)
     private Integer stock;
 
-    private Double precio;
+    @Column(nullable = false)
+    private BigDecimal precio;
 
     @Override
     public Long getId() {
@@ -38,7 +38,8 @@ public class Producto implements Auditable {
 
     @Override
     public String getAuditData() {
-        return "nombre=" + nombre +
+        return "id=" + id +
+                ", nombre=" + nombre +
                 ", categoria=" + categoria +
                 ", stock=" + stock +
                 ", precio=" + precio;

@@ -5,6 +5,7 @@ import com.example.ProyectoSpringAndresCastellanos.Dto.Response.BodegaResponse;
 import com.example.ProyectoSpringAndresCastellanos.Exception.BusinessRuleException;
 import com.example.ProyectoSpringAndresCastellanos.Mapper.BodegaMapper;
 import com.example.ProyectoSpringAndresCastellanos.Model.Bodega;
+import com.example.ProyectoSpringAndresCastellanos.Model.TipoOperacion;
 import com.example.ProyectoSpringAndresCastellanos.Repository.BodegaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class BodegaService {
 
     private final BodegaRepository bodegaRepository;
     private final BodegaMapper bodegaMapper;
+    private final AuditoriaService auditoriaService;
 
     // Crear una bodega
     public BodegaResponse crear(BodegaRequest request) {
@@ -24,6 +26,13 @@ public class BodegaService {
         Bodega bodega = bodegaMapper.toEntity(request);
 
         Bodega guardada = bodegaRepository.save(bodega);
+
+        auditoriaService.registrar(
+                guardada,
+                TipoOperacion.INSERT,
+                null,
+                guardada.getAuditData()
+        );
 
         return bodegaMapper.toResponse(guardada);
     }
@@ -59,6 +68,7 @@ public class BodegaService {
                                 "Bodega no encontrada con id: " + id
                         )
                 );
+        String valorAnterior = bodega.getAuditData();
 
         bodega.setNombre(request.nombre());
         bodega.setUbicacion(request.ubicacion());
@@ -66,6 +76,14 @@ public class BodegaService {
         bodega.setEncargado(request.encargado());
 
         Bodega actualizada = bodegaRepository.save(bodega);
+
+        String valorNuevo = actualizada.getAuditData();
+        auditoriaService.registrar(
+                actualizada,
+                TipoOperacion.UPDATE,
+                valorAnterior,
+                valorNuevo
+        );
 
         return bodegaMapper.toResponse(actualizada);
     }
@@ -79,7 +97,15 @@ public class BodegaService {
                                 "Bodega no encontrada con id: " + id
                         )
                 );
+        String valorAnterior = bodega.getAuditData();
 
         bodegaRepository.delete(bodega);
+
+        auditoriaService.registrar(
+                bodega,
+                TipoOperacion.DELETE,
+                valorAnterior,
+                null
+        );
     }
 }

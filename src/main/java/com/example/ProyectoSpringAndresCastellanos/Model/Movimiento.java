@@ -57,13 +57,19 @@ public class Movimiento implements Auditable {
     @Override
     public String getAuditData() {
 
-        return "fecha=" + fecha +
+        return "id=" + id +
+                ", fecha=" + fecha +
                 ", tipoMovimiento=" + tipoMovimiento +
                 ", usuario=" +
-                (usuario != null ? usuario.getUsername() : null) +
+                (usuario != null ? usuario.getId() : null) +
                 ", bodegaOrigen=" +
-                (bodegaOrigen != null ? bodegaOrigen.getId() : null) +
+                (bodegaOrigen != null
+                        ? bodegaOrigen.getId()
+                        : null) +
                 ", bodegaDestino=" +
-                (bodegaDestino != null ? bodegaDestino.getId() : null);
+                (bodegaDestino != null
+                        ? bodegaDestino.getId()
+                        : null);
+
     }
 }
