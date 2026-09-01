@@ -1,4 +1,9 @@
 package com.example.ProyectoSpringAndresCastellanos.Dto.Response;
 
-public class ReporteResponse {
+import java.util.List;
+
+public record ReporteResponse(
+        List<StockPorBodegaResponse> stockPorBodega,
+        List<ProductoMasMovidoResponse> productosMasMovidos
+) {
 }

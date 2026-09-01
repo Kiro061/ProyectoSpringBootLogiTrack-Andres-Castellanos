@@ -6,6 +6,7 @@ import com.example.ProyectoSpringAndresCastellanos.Service.BodegaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class BodegaController {
 
     // Crear una bodega
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BodegaResponse> crear(
             @Valid @RequestBody BodegaRequest request) {
 
@@ -48,6 +50,7 @@ public class BodegaController {
 
     // Actualizar una bodega
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BodegaResponse> actualizar(
             @PathVariable Long id,
             @Valid @RequestBody BodegaRequest request) {
@@ -59,6 +62,7 @@ public class BodegaController {
 
     // Eliminar una bodega
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(
             @PathVariable Long id) {
 

@@ -40,6 +40,13 @@ public class ProductoService {
                 .toList();
     }
 
+    public List<ProductoResponse> obtenerConStockBajo(Integer umbral){
+        return productoRepository.findByStockLessThan(umbral)
+                .stream()
+                .map(productoMapper::toResponse)
+                .toList();
+    }
+
     public ProductoResponse obtenerPorId(Long id){
         Producto producto = buscarPorId(id);
         return productoMapper.toResponse(producto);

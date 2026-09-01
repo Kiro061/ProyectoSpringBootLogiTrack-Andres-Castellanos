@@ -112,6 +112,13 @@ public class MovimientoService {
                 .toList();
     }
 
+    public List<MovimientoResponse> obtenerPorRangoFechas(LocalDateTime desde, LocalDateTime hasta) {
+        return movimientoRepository.findByFechaBetween(desde, hasta)
+                .stream()
+                .map(movimientoMapper::toResponse)
+                .toList();
+    }
+
     public MovimientoResponse obtenerPorId(Long id) {
         Movimiento movimiento = movimientoRepository.findById(id)
                 .orElseThrow(() -> new BusinessRuleException("Movimiento no encontrado con id: " + id));

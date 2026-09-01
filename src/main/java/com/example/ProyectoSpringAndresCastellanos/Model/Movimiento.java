@@ -1,6 +1,5 @@
 package com.example.ProyectoSpringAndresCastellanos.Model;
 
-import com.example.ProyectoSpringAndresCastellanos.Model.Listener.AuditoriaListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "movimientos")
-@EntityListeners(AuditoriaListener.class)
 @Getter
 @Setter
 @AllArgsConstructor
