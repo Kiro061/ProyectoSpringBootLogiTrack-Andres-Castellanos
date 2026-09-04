@@ -1,5 +1,6 @@
 package com.example.ProyectoSpringAndresCastellanos.Service;
 
+import com.example.ProyectoSpringAndresCastellanos.Dto.Response.CantidadMovRegResponse;
 import com.example.ProyectoSpringAndresCastellanos.Dto.Response.ProductoMasMovidoResponse;
 import com.example.ProyectoSpringAndresCastellanos.Dto.Response.ReporteResponse;
 import com.example.ProyectoSpringAndresCastellanos.Dto.Response.StockPorBodegaResponse;
@@ -18,6 +19,7 @@ import java.util.*;
 public class ReporteService {
 
     private static final int TOP_PRODUCTOS_MAS_MOVIDOS = 5;
+    private static final int ULTIMOS_MOVIMIENTOS_REGISTRADOS = 10;
 
     private final MovimientoDetalleRepository movimientoDetalleRepository;
 
@@ -38,6 +40,7 @@ public class ReporteService {
         Map<Long, String> nombresProducto = new LinkedHashMap<>();
         Map<Long, Integer> stockNetoPorBodega = new LinkedHashMap<>();
         Map<Long, Integer> totalMovidoPorProducto = new LinkedHashMap<>();
+        Map<Long, Integer> cantidadMovRegistrado = new LinkedHashMap<>();
 
         for (MovimientoDetalle detalle : detalles) {
             Movimiento movimiento = detalle.getMovimiento();
@@ -76,6 +79,13 @@ public class ReporteService {
                 .map(e -> new ProductoMasMovidoResponse(e.getKey(), nombresProducto.get(e.getKey()), e.getValue()))
                 .toList();
 
-        return new ReporteResponse(stockPorBodega, productosMasMovidos);
+        List<CantidadMovRegResponse> cantintidadMovReg = cantidadMovRegistrado.entrySet()
+                .stream()
+                .sorted((a,b)-> b.getValue() - a.getValue())
+                .limit(ULTIMOS_MOVIMIENTOS_REGISTRADOS)
+                .map(e-new CantidadMovRegResponse())
+
+
+        return new ReporteResponse(stockPorBodega, productosMasMovidos,cantintidadMovReg);
     }
 }

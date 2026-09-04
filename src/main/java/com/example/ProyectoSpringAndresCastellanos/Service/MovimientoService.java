@@ -125,6 +125,13 @@ public class MovimientoService {
         return movimientoMapper.toResponse(movimiento);
     }
 
+    public List<MovimientoResponse> obtenerUltimos(LocalDateTime desde, LocalDateTime hasta) {
+        return movimientoRepository.findByFechaLast(desde, hasta)
+                .stream()
+                .map(movimientoMapper::toResponse)
+                .toList();
+    }
+
     // ---------------------------------------------------
     // Actualiza el stock del producto según el tipo de movimiento
     // ---------------------------------------------------

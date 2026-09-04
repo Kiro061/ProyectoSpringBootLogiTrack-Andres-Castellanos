@@ -11,5 +11,6 @@ public record MovimientoResponse (
         Long bodegaOrigenId,
         Long bodegaDestinoId,
         List<MovimientoDetalleResponse> detalles
+
 ){
 }

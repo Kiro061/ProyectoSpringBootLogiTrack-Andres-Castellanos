@@ -4,6 +4,7 @@ import java.util.List;
 
 public record ReporteResponse(
         List<StockPorBodegaResponse> stockPorBodega,
-        List<ProductoMasMovidoResponse> productosMasMovidos
+        List<ProductoMasMovidoResponse> productosMasMovidos,
+        List<CantidadMovRegResponse> cantidadMovReg
 ) {
 }

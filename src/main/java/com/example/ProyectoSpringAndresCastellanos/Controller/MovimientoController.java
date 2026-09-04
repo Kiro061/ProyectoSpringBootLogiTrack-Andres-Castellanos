@@ -106,4 +106,14 @@ public class MovimientoController {
                 movimientoService.obtenerPorId(id)
         );
     }
+
+    @GetMapping("/movimientos/recientes")
+    public ResponseEntity<List<MovimientoResponse>> listarRecientes(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime desde,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime hasta){
+     return ResponseEntity.ok(
+       movimientoService.obtenerUltimos(desde,hasta)
+     );
+    }
+
 }

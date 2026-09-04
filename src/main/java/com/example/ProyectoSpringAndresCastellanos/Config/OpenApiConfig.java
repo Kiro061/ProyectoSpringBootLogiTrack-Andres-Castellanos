@@ -8,11 +8,26 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuración de OpenAPI y Swagger para la documentación de la API.
+ *
+ * Permite definir el nombre, descripción y versión de la API,
+ * además de configurar la autenticación mediante tokens JWT.
+ */
 @Configuration
 public class OpenApiConfig {
 
+    /**
+     * Nombre utilizado para identificar el esquema de autenticación JWT.
+     */
     private static final String ESQUEMA_JWT = "bearerAuth";
 
+    /**
+     * Configura la información general de la API y el sistema
+     * de autenticación utilizado por Swagger.
+     *
+     * @return configuración de OpenAPI para la aplicación
+     */
     @Bean
     public OpenAPI logiTrackOpenAPI() {
         return new OpenAPI()
@@ -23,8 +38,11 @@ public class OpenApiConfig {
                                 "Para usar los endpoints protegidos: haz login en /auth/login, " +
                                 "copia el token y pégalo en el botón Authorize (sin escribir 'Bearer').")
                         .version("1.0"))
-                // Aplica el candado a TODOS los endpoints por defecto en la UI
+
+                // Aplica la autenticación JWT a los endpoints de Swagger.
                 .addSecurityItem(new SecurityRequirement().addList(ESQUEMA_JWT))
+
+                // Define el esquema de autenticación mediante Bearer Token.
                 .components(new Components()
                         .addSecuritySchemes(ESQUEMA_JWT, new SecurityScheme()
                                 .name(ESQUEMA_JWT)

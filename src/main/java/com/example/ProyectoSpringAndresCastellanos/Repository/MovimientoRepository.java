@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MovimientoRepository extends JpaRepository<Movimiento,Long> {
     List<Movimiento> findByFechaBetween(LocalDateTime desde, LocalDateTime hasta);
+
+    List<Movimiento>  findByFechaLast(LocalDateTime desde, LocalDateTime hasta);
 }
